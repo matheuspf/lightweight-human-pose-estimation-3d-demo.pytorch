@@ -1,11 +1,15 @@
 import numpy as np
 
-from modules.pose import Pose, propagate_ids
-try:
-    from pose_extractor import extract_poses
-except:
-    print('#### Cannot load fast pose extraction, switched to legacy slow implementation. ####')
-    from modules.legacy_pose_extractor import extract_poses
+from ..modules.pose import Pose, propagate_ids
+
+# try:
+#     from ..modules.pose_extractor import extract_poses
+# except:
+#     print('#### Cannot load fast pose extraction, switched to legacy slow implementation. ####')
+#     from ..modules.legacy_pose_extractor import extract_poses
+
+from pose_extractor import extract_poses
+
 
 AVG_PERSON_HEIGHT = 180
 
@@ -34,6 +38,7 @@ def get_root_relative_poses(inference_results):
     num_kpt = 18
     for pose_id in range(found_poses.shape[0]):
         if found_poses[pose_id, 3] == -1:  # skip pose if does not found neck
+        # if -1 in found_poses[pose_id, 3:10]:  # skip pose if does not found neck
             continue
         pose_2d = np.ones(num_kpt_panoptic * 3 + 1, dtype=np.float32) * -1  # +1 for pose confidence
         for kpt_id in range(num_kpt):
